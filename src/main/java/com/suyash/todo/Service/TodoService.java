@@ -1,5 +1,6 @@
 package com.suyash.todo.Service;
 
+import com.suyash.todo.DTO.TodoDTO;
 import com.suyash.todo.Entity.Todo;
 import com.suyash.todo.Entity.User;
 import com.suyash.todo.Exception.TodoNotFoundException;
@@ -28,28 +29,49 @@ public class TodoService {
     }
 
     // add todo for user
-    public boolean addTodoForUser(Long userId, Todo todo) {
+    public User addTodoForUser(Long userId, TodoDTO todoDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNameNotFoundException("User not found"));
-        return user.getTodoList().add(todo);
+
+        Todo todo = new Todo();
+        todo.setTitle(todoDTO.getTitle());
+        todo.setDescription(todoDTO.getDescription());
+        todo.setCompleted(todoDTO.isCompleted());
+
+        user.getTodoList().add(todo);
+        todoRepository.save(todo);
+        return userRepository.save(user);
     }
 
     // delete todo by id
-    public Todo deleteTodoById(Long todoId) {
+    public Todo deleteTodoById(Long userId, Long todoId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNameNotFoundException("User not found"));
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new TodoNotFoundException("Todo not found"));
+
+        user.getTodoList().remove(todo);
+
         todoRepository.delete(todo);
         return todo;
     }
 
-    public Todo editTodosById(Long todosId, Todo todo) {
-        Todo todoToEdit = todoRepository.findById(todosId)
+    // edit todo by id
+    public Todo editTodosById(Long todoId, TodoDTO todoDTO) {
+        Todo todoToEdit = todoRepository.findById(todoId)
                 .orElseThrow(() -> new TodoNotFoundException("Todo not found"));
 
-        todoToEdit.setTitle(todo.getTitle());
-        todoToEdit.setDescription(todo.getDescription());
-        todoToEdit.setCompleted(todo.isCompleted());
+        Todo todo = new Todo();
+        todo.setTitle(todoDTO.getTitle());
+        todo.setDescription(todoDTO.getDescription());
 
         return todoRepository.save(todoToEdit);
+    }
+
+    // get todo by id
+    public Todo getTodoById(Long todoId) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new TodoNotFoundException("Todo not found"));
+        return todo;
     }
 }

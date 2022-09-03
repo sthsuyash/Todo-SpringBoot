@@ -1,5 +1,6 @@
 package com.suyash.todo.Service;
 
+import com.suyash.todo.DTO.UserDTO;
 import com.suyash.todo.Entity.User;
 import com.suyash.todo.Exception.UserNameAlreadyTakenException;
 import com.suyash.todo.Exception.UserNameNotFoundException;
@@ -14,19 +15,28 @@ public class UserService {
     private UserRepository userRepository;
 
     // create new user
-    public User addUser(User user) {
-        User userToFind = userRepository.findByUsername(user.getUsername());
+    public User addUser(UserDTO userDTO) {
+        User userToFind = userRepository.findByUsername(userDTO.getUsername());
         if (userToFind != null) {
             throw new UserNameAlreadyTakenException("User already exists");
         }
+
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+
         return userRepository.save(user);
     }
 
     // get specific user by id
-    public User getUserById(Long userId) {
+    public UserDTO getUserById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNameNotFoundException("User not found"));
-        return user;
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(user.getUsername());
+        userDTO.setPassword(user.getPassword());
+        return userDTO;
     }
 
     // edit user by id
@@ -50,5 +60,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNameNotFoundException("User not found"));
         userRepository.delete(user);
         return user;
+    }
+
+    // get all users
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

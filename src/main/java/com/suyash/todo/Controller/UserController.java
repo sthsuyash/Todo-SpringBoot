@@ -1,5 +1,6 @@
 package com.suyash.todo.Controller;
 
+import com.suyash.todo.DTO.UserDTO;
 import com.suyash.todo.Entity.User;
 import com.suyash.todo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,20 @@ public class UserController {
 
     // create new user
     @PostMapping("/register")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        return new ResponseEntity<User>(userService.addUser(user), HttpStatus.CREATED);
+    public ResponseEntity<User> addUser(@RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(userService.addUser(userDTO), HttpStatus.CREATED);
+    }
+
+    // get all users
+    @GetMapping
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        return new ResponseEntity<Iterable<User>>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     // get specific user by id
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        return new ResponseEntity<User>(userService.getUserById(userId), HttpStatus.OK);
+    public UserDTO getUserById(@PathVariable Long userId) {
+        return userService.getUserById(userId);
     }
 
     // edit user by id

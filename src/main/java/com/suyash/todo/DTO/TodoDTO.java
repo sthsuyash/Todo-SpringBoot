@@ -1,36 +1,19 @@
-package com.suyash.todo.Entity;
+package com.suyash.todo.DTO;
 
-import javax.persistence.*;
-
-@Entity
-public class Todo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class TodoDTO {
     private String title;
     private String description;
-    private boolean completed = Boolean.FALSE;
+    private boolean completed;
 
-    public Todo() {
+    public TodoDTO() {
     }
 
-    public Todo(Long id,
-                String title,
-                String description,
-                boolean completed) {
-        this.id = id;
+    public TodoDTO(String title,
+                   String description,
+                   boolean completed) {
         this.title = title;
         this.description = description;
         this.completed = completed;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitle() {
