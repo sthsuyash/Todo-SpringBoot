@@ -35,15 +35,15 @@ public class TodoController {
     }
 
     // edit specific todo by id
-    @PutMapping("/edit/{todosId}")
-    public ResponseEntity<Todo> editTodosById(@PathVariable Long todosId, @RequestBody TodoDTO todoDTO) {
-        return new ResponseEntity<Todo>(todoService.editTodosById(todosId, todoDTO), HttpStatus.OK);
+    @PutMapping("{userId}/edit/{todosId}")
+    public ResponseEntity<Todo> editTodosById(@PathVariable Long userId, @PathVariable Long todoId, @RequestBody TodoDTO todoDTO) {
+        return new ResponseEntity<Todo>(todoService.editTodosById(userId, todoId, todoDTO), HttpStatus.OK);
     }
 
     // delete todo by id
     @DeleteMapping("{userId}/delete/{todoId}")
-    public ResponseEntity<Todo> deleteTodoById(@PathVariable Long userId ,@PathVariable Long todoId) {
-        return new ResponseEntity<Todo>(todoService.deleteTodoById(userId,todoId), HttpStatus.OK);
+    public ResponseEntity<Todo> deleteTodoById(@PathVariable Long userId, @PathVariable Long todoId) {
+        return new ResponseEntity<Todo>(todoService.deleteTodoById(userId, todoId), HttpStatus.OK);
     }
 
 }

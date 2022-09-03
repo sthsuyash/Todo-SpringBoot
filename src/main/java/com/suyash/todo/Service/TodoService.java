@@ -57,13 +57,21 @@ public class TodoService {
     }
 
     // edit todo by id
-    public Todo editTodosById(Long todoId, TodoDTO todoDTO) {
+    public Todo editTodosById(Long userId, Long todoId, TodoDTO todoDTO) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNameNotFoundException("User not found"));
+
         Todo todoToEdit = todoRepository.findById(todoId)
                 .orElseThrow(() -> new TodoNotFoundException("Todo not found"));
+
+        user.getTodoList().remove(todoToEdit);
 
         Todo todo = new Todo();
         todo.setTitle(todoDTO.getTitle());
         todo.setDescription(todoDTO.getDescription());
+
+        user.getTodoList().add(todo);
 
         return todoRepository.save(todoToEdit);
     }
