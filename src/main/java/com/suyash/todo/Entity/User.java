@@ -1,7 +1,5 @@
 package com.suyash.todo.Entity;
 
-import com.suyash.todo.Entity.Todo.Todo;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
